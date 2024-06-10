@@ -2,6 +2,10 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
+import { getAllNotes, newNote } from './utils/notes.js'
+import { listNotes } from './utils/utils.js'
+import { getDB } from './utils/db.js'
+
 // Init yargs with process.argv to parse command line arguments
 yargs(hideBin(process.argv))
   /**
@@ -14,7 +18,9 @@ yargs(hideBin(process.argv))
       type: 'string',
     })
   }, async (argv) => {
-
+    const tags = argv.tags ? argv.tags.split(',') : []
+    const note = await newNote(argv.note, tags)
+    console.log('New note!', note)
   })
   /**
    * Options for new note command
@@ -29,7 +35,8 @@ yargs(hideBin(process.argv))
    * Usage: note all
    **/
   .command('all', 'get all notes', () => {}, async (argv) => {
-
+    const db = await getDB()
+    listNotes(db.notes)
   })
   /**
    * Find notes by filter

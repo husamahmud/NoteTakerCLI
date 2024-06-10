@@ -7,8 +7,13 @@ const DB_PATH = new URL('../db.json', import.meta.url).pathname
  * @returns {Promise<Object>} The database object
  **/
 export const getDB = async () => {
-  const db = await fs.readFile(DB_PATH, 'utf-8')
-  return JSON.parse(db)
+  try {
+    const db = await fs.readFile(DB_PATH, 'utf-8')
+    return JSON.parse(db)
+  } catch (err) {
+    console.error('Failed to read database:', err)
+    return { notes: [] }
+  }
 }
 
 /**
@@ -17,6 +22,9 @@ export const getDB = async () => {
  * @returns {Promise<Object>} The database object
  * */
 export const saveDB = async (db) => {
+  if (!db || !Array.isArray(db.notes)) {
+    console.error('Invalid database structure:', error)
+  }
   await fs.writeFile(DB_PATH, JSON.stringify(db, null, 2))
   return db
 }

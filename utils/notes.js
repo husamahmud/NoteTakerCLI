@@ -22,8 +22,17 @@ export const newNote = async (note, tags) => {
  * @returns {Promise<object[]>} - All notes
  **/
 export const getAllNotes = async () => {
-  const { notes } = getDB()
-  return notes
+  try {
+    const db = await getDB()
+    if (!db || !Array.isArray(db.notes)) {
+      console.error('Warning: No notes found.')
+      return []
+    }
+    return db.notes
+  } catch (error) {
+    console.error('Failed to retrieve notes:', error.message)
+    return []
+  }
 }
 
 /**
@@ -54,6 +63,8 @@ export const removeNote = async (id) => {
 
 /**
  * removeAllNote - Remove all notes
- * @returns {Promise<void>}
+ * @returns {Promise<Object>}
  **/
-export const removeAllNote = () => saveDB({ notes: [] })
+export const removeAllNote = async () => {
+  return await saveDB({ notes: [] })
+}
