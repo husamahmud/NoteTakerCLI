@@ -2,7 +2,7 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
-import { getAllNotes, newNote } from './utils/notes.js'
+import { findNotes, getAllNotes, newNote } from './utils/notes.js'
 import { listNotes } from './utils/utils.js'
 import { getDB } from './utils/db.js'
 
@@ -48,7 +48,12 @@ yargs(hideBin(process.argv))
       type: 'string',
     })
   }, async (argv) => {
-
+    const matched = await findNotes(argv.filter)
+    if (matched.length === 0) {
+      console.log('Note not found!')
+      return
+    }
+    listNotes(matched)
   })
   /**
    * Remove a note by id
