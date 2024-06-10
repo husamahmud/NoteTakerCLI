@@ -2,7 +2,13 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
-import { findNotes, getAllNotes, newNote } from './utils/notes.js'
+import {
+  findNotes,
+  getAllNotes,
+  newNote,
+  removeAllNote,
+  removeNote,
+} from './utils/notes.js'
 import { listNotes } from './utils/utils.js'
 import { getDB } from './utils/db.js'
 
@@ -65,7 +71,10 @@ yargs(hideBin(process.argv))
       description: 'The id of the note you want to remove',
     })
   }, async (argv) => {
+    const id = await removeNote(argv.id)
+    if (!id) return
 
+    console.log(id)
   })
   /**
    * Launch a website to see notes
@@ -86,7 +95,8 @@ yargs(hideBin(process.argv))
    * Usage: note clean
    **/
   .command('clean', 'remove all notes', () => {}, async (argv) => {
-
+    await removeAllNote()
+    console.log('DB reseted')
   })
   .demandCommand(1)
   .parse()

@@ -51,12 +51,19 @@ export const findNotes = async (query) => {
  * @returns {Promise<number|null>} - The id of the removed note or null if not found
  **/
 export const removeNote = async (id) => {
-  const notes = await getDB()
-  const match = notes.find(note => note.id === id)
+  const db = await getDB()
+  if (!db || !Array.isArray(db.notes)) {
+    console.error('Failed to retrieve notes')
+    return null
+  }
 
-  if (!match) return null
+  const match = db.notes.find(note => note.id === id)
+  if (!match) {
+    console.error('No note found with id:', id)
+    return null
+  }
 
-  const newNotes = notes.filter(note => note.id !== id)
+  const newNotes = db.notes.filter(note => note.id !== id)
   await saveDB({ notes: newNotes })
   return id
 }
