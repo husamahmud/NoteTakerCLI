@@ -8,9 +8,9 @@ import {
   newNote,
   removeAllNote,
   removeNote,
-} from './utils/notes.js'
-import { listNotes } from './utils/utils.js'
-import { getDB } from './utils/db.js'
+} from './src/notes.js'
+import { listNotes } from './src/utils.js'
+import { getDB } from './src/db.js'
 
 // Init yargs with process.argv to parse command line arguments
 yargs(hideBin(process.argv))
