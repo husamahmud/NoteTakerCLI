@@ -11,6 +11,7 @@ import {
 } from './src/notes.js'
 import { listNotes } from './src/utils.js'
 import { getDB } from './src/db.js'
+import { start } from './src/server.js'
 
 // Init yargs with process.argv to parse command line arguments
 yargs(hideBin(process.argv))
@@ -88,7 +89,8 @@ yargs(hideBin(process.argv))
         type: 'number',
       })
   }, async (argv) => {
-
+    const notes = await getAllNotes()
+    start(notes, argv.port)
   })
   /**
    * Remove all notes
